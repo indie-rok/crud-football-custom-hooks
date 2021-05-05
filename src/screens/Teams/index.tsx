@@ -12,7 +12,7 @@ interface Team {
 
 const renderTeams = (teams: Team[]) =>
   teams.map(({ team_id, team_name, logo }) => (
-    <Col>
+    <Col key={team_id}>
       <Card style={{ width: "18rem" }} className="">
         <Card.Img variant="top" src={logo} />
         <Card.Body>

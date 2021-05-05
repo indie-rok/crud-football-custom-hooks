@@ -1,53 +1,28 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { Container, Row, Col, Table, Button } from "react-bootstrap";
 
 import { getTeamDetails, getTeamPlayers } from "../../api/Teams";
+import usePlayers, { Player } from "../../hooks/usePlayers";
 
 interface RouteParams {
   team_id: string;
 }
 
-interface TeamDetails {
-  team_id: string;
-  description: string;
+interface PlayerProps {
+  players: Player[];
 }
 
-const renderTeamDetails = ({ description }: any) => <h3>{description}</h3>;
-
-function usePlayers(players: any) {
-  const [filteredPlayers, setFilteredPlayers] = useState(players);
-
-  useEffect(() => {
-    setFilteredPlayers(players);
-  }, [players]);
-
-  const onDelete = (idToDelete: string) => {
-    setFilteredPlayers(
-      filteredPlayers.filter((player: any) => player.player_id !== idToDelete)
-    );
-  };
-
-  const onChange = useCallback(
-    (ev, player_id) => {
-      const indexToModify = filteredPlayers.findIndex(
-        (player: any) => player.player_id === player_id
-      );
-
-      const playersToEdit = [...filteredPlayers];
-
-      playersToEdit[indexToModify]["name"] = ev.target.value;
-
-      setFilteredPlayers(playersToEdit);
-    },
-    [filteredPlayers]
-  );
-
-  return { onDelete, filteredPlayers, onChange };
+interface TeamDetail {
+  description?: string;
 }
 
-const Players = ({ players = [] }: any) => {
+const renderTeamDetails = ({ description }: TeamDetail) => (
+  <h3>{description}</h3>
+);
+
+const Players = ({ players = [] }: PlayerProps) => {
   const { onDelete, onChange, filteredPlayers } = usePlayers(players);
 
   return (
@@ -59,7 +34,7 @@ const Players = ({ players = [] }: any) => {
         </tr>
       </thead>
       <tbody>
-        {filteredPlayers.map(({ name, player_id }: any) => (
+        {filteredPlayers.map(({ name, player_id }: Player) => (
           <tr key={player_id}>
             <td>
               <input
