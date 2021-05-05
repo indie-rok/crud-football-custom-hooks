@@ -12,53 +12,78 @@ interface RouteParams {
 
 interface PlayerProps {
   players: Player[];
+  teamId: string;
 }
 
-interface TeamDetail {
+interface TeamDetailInterface {
   description?: string;
 }
 
-const renderTeamDetails = ({ description }: TeamDetail) => (
+const renderTeamDetails = ({ description }: TeamDetailInterface) => (
   <h3>{description}</h3>
 );
 
-const Players = ({ players = [] }: PlayerProps) => {
-  const { onDelete, onChange, filteredPlayers } = usePlayers(players);
+const Players = ({ players = [], teamId }: PlayerProps) => {
+  const { onDelete, onChange, filteredPlayers, addPlayer } = usePlayers(
+    players
+  );
+  const [newPlayerName, setNewPlayerName] = useState("");
 
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredPlayers.map(({ name, player_id }: Player) => (
-          <tr key={player_id}>
-            <td>
-              <input
-                type="text"
-                value={name}
-                onChange={(ev) => {
-                  onChange(ev, player_id);
-                }}
-              />
-            </td>
-            <td>
-              <Button
-                variant="danger"
-                onClick={() => {
-                  onDelete(player_id);
-                }}
-              >
-                Delete
-              </Button>
-            </td>
+    <>
+      <h4>Add Player</h4>
+      <input
+        type="text"
+        onChange={(ev) => {
+          setNewPlayerName(ev.target.value);
+        }}
+        value={newPlayerName}
+      />
+      <Button
+        onClick={() => {
+          addPlayer(newPlayerName, teamId);
+        }}
+      >
+        Create
+      </Button>
+      <hr />
+
+      <h4>All Players</h4>
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th></th>
           </tr>
-        ))}
-      </tbody>
-    </Table>
+        </thead>
+        <tbody>
+          {filteredPlayers.map(({ name, player_id }: Player) => (
+            <tr key={player_id}>
+              <td>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(ev) => {
+                    onChange(ev, player_id);
+                  }}
+                />
+              </td>
+              <td>
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    onDelete(player_id);
+                  }}
+                >
+                  Delete
+                </Button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </>
   );
 };
 
@@ -86,7 +111,7 @@ export default function TeamDetail() {
           <Col>{renderTeamDetails(teamDetails)}</Col>
           <Col>
             <h4>Players</h4>
-            <Players players={players} />
+            <Players players={players} teamId={team_id} />
           </Col>
         </Row>
       </Container>

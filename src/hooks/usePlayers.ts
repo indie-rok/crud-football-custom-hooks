@@ -36,5 +36,19 @@ export default function usePlayers(players: Player[]) {
     [filteredPlayers]
   );
 
-  return { onDelete, filteredPlayers, onChange };
+  const addPlayer = useCallback(
+    (newPlayerName, teamId) => {
+      setFilteredPlayers([
+        ...filteredPlayers,
+        {
+          player_id: Date.now().toString(),
+          name: newPlayerName,
+          team_id: teamId,
+        },
+      ]);
+    },
+    [filteredPlayers]
+  );
+
+  return { onDelete, filteredPlayers, onChange, addPlayer };
 }
