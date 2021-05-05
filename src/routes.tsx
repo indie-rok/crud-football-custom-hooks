@@ -1,29 +1,25 @@
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
+import Menu from "./components/Menu";
+
+import Teams from "./screens/Teams";
+import TeamDetail from "./screens/TeamDetail";
+
 export default function Routes() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/team/1">Team Test</Link>
-            </li>
-          </ul>
-        </nav>
+      <>
+        <Menu />
 
         <Switch>
           <Route path="/" exact>
-            <h1>teams</h1>
+            <Teams />
           </Route>
           <Route path="/team/:id">
-            <h1>detail</h1>
+            <TeamDetail />
           </Route>
         </Switch>
-      </div>
+      </>
     </Router>
   );
 }
