@@ -15,7 +15,7 @@ export default function Routes() {
           <Route path="/" exact>
             <Teams />
           </Route>
-          <Route path="/team/:id">
+          <Route path="/team/:team_id">
             <TeamDetail />
           </Route>
         </Switch>
